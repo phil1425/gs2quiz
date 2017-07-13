@@ -1,3 +1,4 @@
+#program to create a javascript object containing all question of the quiz
 import re
 questions = open('questions.txt','r')
 result = open('myQuestions.txt','w')
