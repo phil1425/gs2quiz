@@ -4,9 +4,14 @@ var numberContainer = document.getElementById('number');
 var submitButton = document.getElementById('submit');
 var rerunButton = document.getElementById('rerun');
 var randomButton = document.getElementById('random');
+var gotoButton = document.getElementById('goto')
+var numQuestion = document.getElementById('numQuestion')
 var i = 0;
-var mistakes = 0;
+var trueAnswers = 0;
+var mistake = false;
+var wrongAnswers = 0;
 var totalQuestions = 0;
+resultShown = 0;
 
 generateQuiz(myQuestions, quizContainer, resultsContainer, submitButton);
 
@@ -16,6 +21,7 @@ function generateQuiz(questions, quizContainer, resultsContainer, submitButton){
         // we'll need a place to store the output and the answer choices
         var output = [];
         var answers = [];
+        mistake = false;
 
         // first reset the list of answers
         answers = [];
@@ -43,7 +49,7 @@ function generateQuiz(questions, quizContainer, resultsContainer, submitButton){
         // finally combine our output list into one string of html and put it on the page
         quizContainer.innerHTML = output.join('');
         z = i+1;
-        resultsContainer.innerHTML = mistakes+' Fehlerpunkte bei '+totalQuestions+' Fragen';
+        resultsContainer.innerHTML = trueAnswers+' Richtige bei '+totalQuestions+' Fragen';
         numberContainer.innerHTML = 'Frage ' +z+ ' von ' + questions.length;
     }
 
@@ -66,21 +72,41 @@ function generateQuiz(questions, quizContainer, resultsContainer, submitButton){
           if(tickedAnswers[j].value in questions[i].correctAnswers){
             console.log(tickedAnswers[j].value + 'r');
             tickedAnswers[j].parentElement.style.backgroundColor = 'lightgreen';
+            if(resultShown<4){
+              tickedAnswers[j].parentElement.append('\u2713');
+            }
+            resultShown++;
           }else{
             console.log(tickedAnswers[j].value + 'f');
-            mistakes++;
+            mistake = true;
             tickedAnswers[j].parentElement.style.backgroundColor = 'red';
+            if(resultShown<4){
+              tickedAnswers[j].parentElement.append('\u00D7');
+            }
+            resultShown++;
           }
         }
         for(var j=0; j<untickedAnswers.length; j++){
           if(untickedAnswers[j].value in questions[i].correctAnswers){
             console.log(untickedAnswers[j].value + 'f');
-            mistakes++;
+            mistake = true;
             untickedAnswers[j].parentElement.style.backgroundColor = 'red';
+            if(resultShown<4){
+              untickedAnswers[j].parentElement.append('\u2713');
+            }
+            resultShown++;
           }else{
             console.log(untickedAnswers[j].value + 'r');
             untickedAnswers[j].parentElement.style.backgroundColor = 'lightgreen';
+            if(resultShown<4){
+              untickedAnswers[j].parentElement.append('\u00D7');
+            }
+            resultShown++;
+
           }
+        }
+        if(mistake == false && resultShown<5){
+          trueAnswers++;
         }
 
         // show number of correct answers out of total
@@ -95,6 +121,7 @@ function generateQuiz(questions, quizContainer, resultsContainer, submitButton){
     }
     rerunButton.onclick = function(){
       totalQuestions++;
+      resultShown = 0;
         if(i>= (questions.length-1)){
           i = 0;
         }else{
@@ -105,7 +132,18 @@ function generateQuiz(questions, quizContainer, resultsContainer, submitButton){
 
     randomButton.onclick = function(){
       totalQuestions++;
+      resultShown = 0;
       i = Math.floor((Math.random() * questions.length));
       generateQuiz(myQuestions, quizContainer, resultsContainer, submitButton);
+    }
+
+    gotoButton.onclick = function(){
+      console.log(numQuestion.value);
+      totalQuestions++;
+      resultShown = 0;
+      if (numQuestion.value <= questions.length && numQuestion.value >0){
+        i = parseInt(numQuestion.value)-1;
+        generateQuiz(myQuestions, quizContainer, resultsContainer, submitButton);
+      }
     }
 }

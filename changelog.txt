@@ -1,0 +1,6 @@
+30.7.17:
+- Programm zaehlt jetzt die Anzahl der richtig beantworteten fragen anstatt Fehlerpunkten
+- "Gehezu Frage Nr" Funktion Hinzugefuegt
+- Frage I 6 25 wegen fehlendem piktogramm entfernt
+- Frage 2 21, antwort d ueberarbeitet
+- Frage I 8 2/I 8 3 voneinander getrennt 
